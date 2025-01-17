@@ -3,7 +3,6 @@
 
 #include "datas.hpp"
 
-
 class Entity {
 public:
     virtual void update(float deltaTime) = 0;

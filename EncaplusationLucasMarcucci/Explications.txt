@@ -1,0 +1,7 @@
+ajouts : 
+
+Jour 1
+	-Un joueur (rectangle) qui peut se deplacer avec les fleches directionnelles et attaquer avec A.
+	-Le joueur ne peut pas sortir de l'écran
+
+
