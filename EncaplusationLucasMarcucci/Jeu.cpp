@@ -25,22 +25,22 @@ void Jeu::makeText(Text& text, Font& font, string message, int characterSize, Co
 void Jeu::boucleDeJeu() {
     RenderWindow window(VideoMode(WIDTH, HEIGHT), "Escape the Dungeon");
 
-    Color couleurJoueur(177, 220, 222);
-    
     while (window.isOpen()) {
         Event event;
         Keyboard keyboard;
-        
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
                 window.close();
             }
         }
+        if (Keyboard::isKeyPressed(Keyboard::A)) { cout << "attaque" << endl; }
         player.update(5.f);
 
         window.setFramerateLimit(60);
         window.clear();
+
         player.draw(window);
+
         window.display();
     }
 }
