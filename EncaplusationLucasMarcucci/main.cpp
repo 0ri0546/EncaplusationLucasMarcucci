@@ -1,22 +1,6 @@
-#include <SFML/Graphics.hpp>
+#include "Jeu.hpp"
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Fenêtre SFML");
-
-    sf::CircleShape shape(50); 
-    shape.setFillColor(sf::Color::Green);
-
-    while (window.isOpen()) {
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
-                window.close(); 
-        }
-
-        window.clear();
-        window.draw(shape);
-        window.display();
-    }
-
-    return 0;
+    Jeu jeu(WIDTH / 2 - SIZEX, HEIGHT / 2 - SIZEY, 8.);
+    jeu.boucleDeJeu();
 }
