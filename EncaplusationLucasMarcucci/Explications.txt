@@ -6,4 +6,5 @@ Jour 1
 
 Jour 2
     -enemis de type "chase" ou "patrol".
-	-boost de vitesse pour le joueur
+	-boost de vitesse pour le joueur.
+	-game over.

@@ -15,16 +15,16 @@ void Enemy::draw(RenderWindow& window) {
 };
 
 void Enemy::PatrollingEnemy() {
-	if (goToRight && enemy.getPosition().x + SIZEX < WIDTH - 50) { enemy.move(5, 0); }
+	if (goToRight && enemy.getPosition().x + SIZEX < WIDTH - 50) { enemy.move(4, 0); }
 	else { goToRight = false; }
-	if (!goToRight && enemy.getPosition().x > 50) { enemy.move(-5, 0); }
+	if (!goToRight && enemy.getPosition().x > 50) { enemy.move(-4, 0); }
 	else { goToRight = true; }
 }
 
 void Enemy::ChaserEnemy() {
     static Vector2f targetPosition = enemy.getPosition();
     static Clock clock;
-    float velocity = 100.f;
+    float velocity = 110.f;
     const float stopThreshold = 5.f;
     const float maxX = WIDTH;
     const float maxY = HEIGHT;

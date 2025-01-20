@@ -38,8 +38,8 @@ bool Jeu::checkCollision(double x1, double y1, double sizeX1, double sizeY1, dou
 void Jeu::boucleDeJeu() {
     RenderWindow window(VideoMode(WIDTH, HEIGHT), "Escape the Dungeon");
     gameOverSprite.setTexture(gameOverScreen);
-    gameOverSprite.setScale(WIDTH, HEIGHT);
-    gameOverSprite.setPosition(0, 0);
+    gameOverSprite.setScale(WIDTH / gameOverScreen.getSize().x, HEIGHT / gameOverScreen.getSize().y);
+    gameOverSprite.setPosition(WIDTH / 2 - gameOverScreen.getSize().x / 2, HEIGHT / 2 - gameOverScreen.getSize().y / 2);
 
     makeEnemies(100, 100, "chase");
     makeEnemies(50, 50, "patrol");
@@ -52,22 +52,17 @@ void Jeu::boucleDeJeu() {
                 window.close();
             }
         }
-         //cout << enemi1.getX() << ", " << enemi1.getY() << " ;;;; " << player.getX() << ", " << player.getY() << endl;
         window.clear();
         for (int i = 0; i < enemies.size(); i++) {
+            if (!gameOver) { enemies[i].update(5.f); enemies[i].draw(window); }
             if (checkCollision(player.getX(), player.getY(), SIZEX, SIZEY, enemies[i].getX(), enemies[i].getY(), SIZEX, SIZEY)) {
-                /*window.close();*/
-                window.draw(gameOverSprite);
+                gameOver = true;
             }
-            enemies[i].update(5.f);
-            enemies[i].draw(window);
         }
-
         window.setFramerateLimit(60);
-        
-        player.update(5.f);
 
-        player.draw(window);
+        if (gameOver) { window.draw(gameOverSprite); }
+        if (!gameOver) { player.update(5.f); player.draw(window); }
 
         window.display();
     }
