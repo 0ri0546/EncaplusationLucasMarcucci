@@ -3,10 +3,6 @@
 
 #include "Entity.hpp"
 
-using namespace std;
-using namespace sf;
-
-
 class Player : public Entity{
 public:
 	double x, y;
@@ -17,8 +13,11 @@ public:
 
 	void update(float deltaTime) override;
 	void draw(RenderWindow& window) override;
-	void makeRectangle(RectangleShape& rectangle, Color& color, float posX, float posY, float sizeX, float sizeY);
+	int timerBoost = 0;
 	void handleInput();
+	double getX();
+	double getY();
+	Vector2f getPos();
 };
 
 #endif

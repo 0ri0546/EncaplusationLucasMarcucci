@@ -2,6 +2,8 @@ ajouts :
 
 Jour 1
 	-Un joueur (rectangle) qui peut se deplacer avec les fleches directionnelles et attaquer avec A.
-	-Le joueur ne peut pas sortir de l'écran
+	-Le joueur ne peut pas sortir de l'écran.
 
-
+Jour 2
+    -enemis de type "chase" ou "patrol".
+	-boost de vitesse pour le joueur

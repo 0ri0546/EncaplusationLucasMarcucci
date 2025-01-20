@@ -7,6 +7,7 @@ class Entity {
 public:
     virtual void update(float deltaTime) = 0;
     virtual void draw(RenderWindow & window) = 0;
+    void makeRectangle(RectangleShape& rectangle, Color& color, float posX, float posY, float sizeX, float sizeY);
 };
 
 #endif
