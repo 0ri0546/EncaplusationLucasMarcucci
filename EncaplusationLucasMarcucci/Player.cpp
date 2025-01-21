@@ -1,9 +1,9 @@
 #include "Player.hpp"
 
 Player::Player(double x, double y, double spe) : x(x), y(y), spe(spe) {
-	Color couleurJoueur(177, 220, 222);
-	makeRectangle(joueur, couleurJoueur, x, y, SIZEX, SIZEY);
-	
+	if (!personnageTexture.loadFromFile("personnage.png")) {}
+	resize(personnageTexture, personnageSprite, SIZEX, SIZEY);
+	personnageSprite.setPosition(x, y);
 };
 
 void Player::update(float deltaTime) {
@@ -11,23 +11,34 @@ void Player::update(float deltaTime) {
 };
 
 void Player::draw(RenderWindow& window) {
-	window.draw(joueur);
+	window.draw(personnageSprite);
 };
 
 void Player::handleInput() {
-	if (Keyboard::isKeyPressed(Keyboard::Right) && joueur.getPosition().x + SIZEX < WIDTH) { joueur.move(spe, 0); }
-	if (Keyboard::isKeyPressed(Keyboard::Left) && joueur.getPosition().x > 0) { joueur.move(-spe, 0); }
-	if (Keyboard::isKeyPressed(Keyboard::Up) && joueur.getPosition().y > 0) { joueur.move(0,-spe); }
-	if (Keyboard::isKeyPressed(Keyboard::Down) && joueur.getPosition().y + SIZEY < HEIGHT) { joueur.move(0, spe); }
-	if (timerBoost == 0) {
-		spe = 8.;
-		if (Keyboard::isKeyPressed(Keyboard::B)) { spe = 12.; timerBoost = 120; }
+	if (Keyboard::isKeyPressed(Keyboard::Right) && personnageSprite.getPosition().x + SIZEX < WIDTH) { 
+		personnageSprite.move(spe, 0); 
+		/*personnageSprite.setScale(-2.1875, 2.1875);*/
 	}
-	timerBoost--;
-	if (timerBoost < 0) { timerBoost = 0; }
-	
+	if (Keyboard::isKeyPressed(Keyboard::Left) && personnageSprite.getPosition().x > 0) { 
+		personnageSprite.move(-spe, 0);
+		/*personnageSprite.setScale(2.1875, 2.1875);*/ // taille souhaitée / taille de la texture = 2.1875
+	}
+	if (Keyboard::isKeyPressed(Keyboard::Up) && personnageSprite.getPosition().y > 0) { personnageSprite.move(0,-spe); }
+	if (Keyboard::isKeyPressed(Keyboard::Down) && personnageSprite.getPosition().y + SIZEY < HEIGHT) { personnageSprite.move(0, spe); }
 }
 
-double Player::getX() { return joueur.getPosition().x; }
-double Player::getY() { return joueur.getPosition().y; }
-Vector2f Player::getPos() { return joueur.getPosition(); }
+void Player::increaseSpeed(float speed) {
+	spe = speed;
+}
+
+void Player::collectKey() {
+	keys++;
+}
+
+const FloatRect Player::getBounds() {
+	return personnageSprite.getGlobalBounds();
+}
+
+double Player::getX() { return personnageSprite.getPosition().x; }
+double Player::getY() { return personnageSprite.getPosition().y; }
+Vector2f Player::getPos() { return personnageSprite.getPosition(); }

@@ -11,6 +11,8 @@ public:
 	string type;
 
 	RectangleShape enemy;
+	Texture enemyTexture;
+	Sprite enemySprite;
 
 	Enemy(double x, double y, string type, Player* p);
 

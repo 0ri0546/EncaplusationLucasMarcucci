@@ -2,6 +2,7 @@
 
 Jeu::Jeu(double x, double y, double speed) : player(Player(x, y, speed)) {
     if (!gameOverScreen.loadFromFile("gameOver.jpg")) {}
+    if (!mapTexture.loadFromFile("map.png")) {}
 }
 
 void Jeu::makeEnemies(double x, double y, string type) {
@@ -35,14 +36,32 @@ bool Jeu::checkCollision(double x1, double y1, double sizeX1, double sizeY1, dou
     return overlapX && overlapY;
 }
 
+void Jeu::resize(Texture& texture, Sprite& sprite, float scaleX, float scaleY) {
+    sprite.setTexture(texture);
+    float scaleFinaleX = scaleX / texture.getSize().x;
+    float scaleFinaleY = scaleY / texture.getSize().y;
+    sprite.setScale(scaleFinaleX, scaleFinaleY);
+}
+
+float Jeu::randomFloat(float min, float max) {
+    return min + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (max - min)));
+}
+
 void Jeu::boucleDeJeu() {
     RenderWindow window(VideoMode(WIDTH, HEIGHT), "Escape the Dungeon");
-    gameOverSprite.setTexture(gameOverScreen);
-    gameOverSprite.setScale(WIDTH / gameOverScreen.getSize().x, HEIGHT / gameOverScreen.getSize().y);
-    gameOverSprite.setPosition(WIDTH / 2 - gameOverScreen.getSize().x / 2, HEIGHT / 2 - gameOverScreen.getSize().y / 2);
+    resize(gameOverScreen, gameOverSprite, WIDTH, HEIGHT);
+    gameOverSprite.setPosition(0, 0);
+
+    resize(mapTexture, mapSprite, WIDTH, HEIGHT);
+    mapSprite.setPosition(0, 0);
 
     makeEnemies(100, 100, "chase");
     makeEnemies(50, 50, "patrol");
+
+    vector<unique_ptr<Interactable>> interactables;
+    srand(static_cast<unsigned>(time(nullptr)));
+    interactables.push_back(make_unique<Potion>(Vector2f(randomFloat(0.f, WIDTH - SIZEX), randomFloat(0.f, HEIGHT - SIZEY))));
+    interactables.push_back(make_unique<Key>(Vector2f(randomFloat(0.f, WIDTH - SIZEX), randomFloat(0.f, HEIGHT - SIZEY))));
 
     while (window.isOpen()) {
         Event event;
@@ -53,17 +72,31 @@ void Jeu::boucleDeJeu() {
             }
         }
         window.clear();
+        window.setFramerateLimit(60);
+        window.draw(mapSprite);
         for (int i = 0; i < enemies.size(); i++) {
             if (!gameOver) { enemies[i].update(5.f); enemies[i].draw(window); }
             if (checkCollision(player.getX(), player.getY(), SIZEX, SIZEY, enemies[i].getX(), enemies[i].getY(), SIZEX, SIZEY)) {
                 gameOver = true;
             }
         }
-        window.setFramerateLimit(60);
+
+        for (auto it = interactables.begin(); it != interactables.end();) {
+            if (player.getBounds().intersects((*it)->getBounds())) {
+                (*it)->interact(player);
+                it = interactables.erase(it);
+            }
+            else { ++it; }
+        }
 
         if (gameOver) { window.draw(gameOverSprite); }
-        if (!gameOver) { player.update(5.f); player.draw(window); }
-
+        else { 
+            player.update(5.f); player.draw(window);
+            for (const auto& interactable : interactables) {
+                interactable->draw(window);
+            }
+        }
+        
         window.display();
     }
 }

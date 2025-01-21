@@ -1,8 +1,9 @@
 #include "Enemy.hpp"
 
 Enemy::Enemy(double _x, double _y, string _type, Player* _p) : p(_p),  x(_x), y(_y), type(_type) {
-	Color couleurEnemy(235, 5, 24);
-	makeRectangle(enemy, couleurEnemy, x, y, SIZEX, SIZEY);
+    if (!enemyTexture.loadFromFile("enemy.png")) {}
+    resize(enemyTexture, enemySprite, SIZEX, SIZEY);
+    enemySprite.setPosition(x, y);
 }
 
 void Enemy::update(float deltaTime) {
@@ -11,18 +12,18 @@ void Enemy::update(float deltaTime) {
 };
 
 void Enemy::draw(RenderWindow& window) {
-	window.draw(enemy);
+	window.draw(enemySprite);
 };
 
 void Enemy::PatrollingEnemy() {
-	if (goToRight && enemy.getPosition().x + SIZEX < WIDTH - 50) { enemy.move(4, 0); }
+	if (goToRight && enemySprite.getPosition().x + SIZEX < WIDTH - 50) { enemySprite.move(4, 0); }
 	else { goToRight = false; }
-	if (!goToRight && enemy.getPosition().x > 50) { enemy.move(-4, 0); }
+	if (!goToRight && enemySprite.getPosition().x > 50) { enemySprite.move(-4, 0); }
 	else { goToRight = true; }
 }
 
 void Enemy::ChaserEnemy() {
-    static Vector2f targetPosition = enemy.getPosition();
+    static Vector2f targetPosition = enemySprite.getPosition();
     static Clock clock;
     float velocity = 110.f;
     const float stopThreshold = 5.f;
@@ -36,12 +37,12 @@ void Enemy::ChaserEnemy() {
     }
     
     float deltaTime = clock.restart().asSeconds();
-    Vector2f currentPosition = enemy.getPosition();
+    Vector2f currentPosition = enemySprite.getPosition();
     Vector2f direction = targetPosition - currentPosition;
     float distance = sqrt(direction.x * direction.x + direction.y * direction.y);
-    if (distance > stopThreshold) { direction /= distance; enemy.move(direction * velocity * deltaTime); }
-    else { enemy.setPosition(targetPosition); }
+    if (distance > stopThreshold) { direction /= distance; enemySprite.move(direction * velocity * deltaTime); }
+    else { enemySprite.setPosition(targetPosition); }
 }
 
-double Enemy::getX() { return enemy.getPosition().x; }
-double Enemy::getY() { return enemy.getPosition().y; }
+double Enemy::getX() { return enemySprite.getPosition().x; }
+double Enemy::getY() { return enemySprite.getPosition().y; }

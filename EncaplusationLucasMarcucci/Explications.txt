@@ -8,3 +8,7 @@ Jour 2
     -enemis de type "chase" ou "patrol".
 	-boost de vitesse pour le joueur.
 	-game over.
+
+Jour 3
+	-objets (potion de vitesse et clef)
+	-textures des enemis, personnage, objets, map

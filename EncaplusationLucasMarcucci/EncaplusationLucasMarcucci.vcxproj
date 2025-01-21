@@ -139,16 +139,22 @@
   <ItemGroup>
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="Interactable.cpp" />
     <ClCompile Include="Jeu.cpp" />
+    <ClCompile Include="Key.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Potion.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="datas.hpp" />
     <ClInclude Include="Enemy.hpp" />
     <ClInclude Include="Entity.hpp" />
+    <ClInclude Include="Interactable.hpp" />
     <ClInclude Include="Jeu.hpp" />
+    <ClInclude Include="Key.hpp" />
     <ClInclude Include="Player.hpp" />
+    <ClInclude Include="Potion.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Explications.txt" />
