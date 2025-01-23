@@ -143,6 +143,7 @@
     <ClCompile Include="Jeu.cpp" />
     <ClCompile Include="Key.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Map.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Potion.cpp" />
   </ItemGroup>
@@ -153,6 +154,7 @@
     <ClInclude Include="Interactable.hpp" />
     <ClInclude Include="Jeu.hpp" />
     <ClInclude Include="Key.hpp" />
+    <ClInclude Include="Map.hpp" />
     <ClInclude Include="Player.hpp" />
     <ClInclude Include="Potion.hpp" />
   </ItemGroup>

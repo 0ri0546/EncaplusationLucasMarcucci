@@ -1,7 +1,7 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 
-#include "Entity.hpp"
+#include "Map.hpp"
 
 class Player : public Entity{
 public:
@@ -14,6 +14,7 @@ public:
 
 	Texture personnageTexture;
 	Sprite personnageSprite;
+	Map map;
 
 	void update(float deltaTime) override;
 	void draw(RenderWindow& window) override;

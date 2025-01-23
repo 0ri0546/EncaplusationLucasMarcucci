@@ -2,7 +2,9 @@
 
 Jeu::Jeu(double x, double y, double speed) : player(Player(x, y, speed)) {
     if (!gameOverScreen.loadFromFile("gameOver.jpg")) {}
-    if (!mapTexture.loadFromFile("map.png")) {}
+    map.loadFromFile("map.txt");
+    player.map = map;
+
 }
 
 void Jeu::makeEnemies(double x, double y, string type) {
@@ -52,11 +54,36 @@ void Jeu::boucleDeJeu() {
     resize(gameOverScreen, gameOverSprite, WIDTH, HEIGHT);
     gameOverSprite.setPosition(0, 0);
 
-    resize(mapTexture, mapSprite, WIDTH, HEIGHT);
-    mapSprite.setPosition(0, 0);
+    //----------------------------------------------------ENNEMIS---------------------------------------
+    Vector2f posEnemi1 = Vector2f(0,0);
+    Vector2f posEnemi2 = Vector2f(50, 200);
+    Vector2f posEnemi3 = Vector2f(600, 100);
+    Vector2f posEnemi4 = Vector2f(800, 800);
+    while (map.isObstacle(posEnemi1.x, posEnemi1.y)) {
+        posEnemi1.x += SIZEX;
+        posEnemi1.y += SIZEY;
+    }
+    makeEnemies(posEnemi1.x, posEnemi1.y, "patrol");
+    while (map.isObstacle(posEnemi2.x, posEnemi2.y)) {
+        posEnemi2.x += SIZEX;
+        posEnemi2.y += SIZEY;
+    }
+    makeEnemies(posEnemi2.x, posEnemi2.y, "chase");
+    while (map.isObstacle(posEnemi3.x, posEnemi3.y)) {
+        posEnemi3.x += SIZEX;
+        posEnemi3.y += SIZEY;
+    }
+    makeEnemies(posEnemi3.x, posEnemi3.y, "chase");
+    while (map.isObstacle(posEnemi4.x, posEnemi4.y)) {
+        posEnemi4.x += SIZEX;
+        posEnemi4.y += SIZEY;
+    }
+    makeEnemies(posEnemi4.x, posEnemi4.y, "patrol");
+    /*for (auto elem : enemies) {
+        cout << elem.getType(elem) << endl;
+    }*/
+    //----------------------------------------------------/ENNEMIS---------------------------------------
 
-    makeEnemies(100, 100, "chase");
-    makeEnemies(50, 50, "patrol");
 
     vector<unique_ptr<Interactable>> interactables;
     srand(static_cast<unsigned>(time(nullptr)));
@@ -73,12 +100,12 @@ void Jeu::boucleDeJeu() {
         }
         window.clear();
         window.setFramerateLimit(60);
-        window.draw(mapSprite);
+        map.draw(window);
         for (int i = 0; i < enemies.size(); i++) {
             if (!gameOver) { enemies[i].update(5.f); enemies[i].draw(window); }
-            if (checkCollision(player.getX(), player.getY(), SIZEX, SIZEY, enemies[i].getX(), enemies[i].getY(), SIZEX, SIZEY)) {
-                gameOver = true;
-            }
+            //if (checkCollision(player.getX(), player.getY(), SIZEX, SIZEY, enemies[i].getX(), enemies[i].getY(), SIZEX, SIZEY)) {
+            //    gameOver = true;
+            //}
         }
 
         for (auto it = interactables.begin(); it != interactables.end();) {

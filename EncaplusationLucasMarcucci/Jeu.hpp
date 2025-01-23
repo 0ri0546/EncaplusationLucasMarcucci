@@ -1,13 +1,14 @@
 #ifndef JEU_HPP
 #define JEU_HPP
 
+#include "Potion.hpp"
 #include "Enemy.hpp"
-#include"Potion.hpp"
 
 class Jeu {
 public:
 	Player player;
 	vector<Enemy> enemies;
+	Map map;
 	
 	Jeu(double x, double y, double speed);
 

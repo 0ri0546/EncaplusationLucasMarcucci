@@ -13,6 +13,7 @@ public:
 	RectangleShape enemy;
 	Texture enemyTexture;
 	Sprite enemySprite;
+	Map map;
 
 	Enemy(double x, double y, string type, Player* p);
 
@@ -23,6 +24,8 @@ public:
 	bool goToRight = true;
 	double getX();
 	double getY();
+	void setX(double newX);
+	void setY(double newY);
 };
 
 #endif
