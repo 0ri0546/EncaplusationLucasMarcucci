@@ -7,7 +7,7 @@ Escape the Dungeon est un jeu d'aventure en 2D où le joueur incarne un personna
 Personnage principal : contrôlé avec les touches directionnelles.
 
 ### Ennemis polymorphiques :
-ChaserEnemy : poursuit le joueur. \n
+ChaserEnemy : poursuit le joueur.
 PatrollingEnemy : suit un trajet prédéfini.
 
 ### Objets interactifs :
