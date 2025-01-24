@@ -9,13 +9,22 @@ public:
 	Player player;
 	vector<Enemy> enemies;
 	Map map;
+	Clock clock;
+	Font font;
 	
 	Jeu(double x, double y, double speed);
 
-	Texture gameOverScreen, mapTexture;
-	Sprite gameOverSprite, mapSprite;
+	Texture gameOverScreen, winTexture, fondTexture, startScreenTexture;
+	Sprite gameOverSprite, winSprite, fondSprite, startScreenSprite; 
+	Text start, timer;
+	RectangleShape timerRect;
 
+	bool startGame = false;
 	bool gameOver = false;
+	bool win = false;
+	int timerInt = 0;
+	int secondes;
+	int minutes;
 	void boucleDeJeu();
 	void makeEnemies(double x, double y, string type);
 	void makeRectangle(RectangleShape& rectangle, Color& color, float posX, float posY, float sizeX, float sizeY);
@@ -24,6 +33,7 @@ public:
 	bool checkCollision(double x1, double y1, double sizeX1, double sizeY1, double x2, double y2, double sizeX2, double sizeY2);
 	void resize(Texture& texture, Sprite& sprite, float scaleX, float scaleY);
 	float randomFloat(float min, float max);
+	void menu();
 };
 
 #endif

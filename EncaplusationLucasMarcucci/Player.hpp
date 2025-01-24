@@ -9,6 +9,13 @@ public:
 	double spe;
 	RectangleShape joueur;
 	int keys = 0;
+
+	int currentFrame = 0;
+	int totalFrames = 4;
+	float frameWidth;
+	float frameHeight;
+	float animationSpeed = 0.3f;
+	float timeSinceLastFrame = 0;
 	
 	Player(double x, double y, double spe);
 
@@ -25,6 +32,7 @@ public:
 	Vector2f getPos();
 	void collectKey();
 	const FloatRect getBounds();
+	void animate(float deltaTime);
 };
 
 #endif

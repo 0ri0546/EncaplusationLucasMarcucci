@@ -15,6 +15,7 @@ public:
     void draw(RenderWindow& window);
     bool isObstacle(double x, double y);
     void resize(Texture& texture, Sprite& sprite, float scaleX, float scaleY);
+    bool isWin(double x, double y);
 };
 
 #endif

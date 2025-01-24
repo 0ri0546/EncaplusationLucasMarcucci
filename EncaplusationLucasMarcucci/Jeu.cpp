@@ -2,13 +2,17 @@
 
 Jeu::Jeu(double x, double y, double speed) : player(Player(x, y, speed)) {
     if (!gameOverScreen.loadFromFile("gameOver.jpg")) {}
+    if (!winTexture.loadFromFile("win.png")) {}
+    if (!fondTexture.loadFromFile("fond.jpg")) {}
+    if (!startScreenTexture.loadFromFile("start.jpg")) {}
+    if (!font.loadFromFile("font.ttf")) {}
     map.loadFromFile("map.txt");
     player.map = map;
-
 }
 
 void Jeu::makeEnemies(double x, double y, string type) {
     Enemy* e = new Enemy(x, y, type, &player);
+    e->setMap(map);
     enemies.push_back(*e);
 }
 
@@ -49,10 +53,45 @@ float Jeu::randomFloat(float min, float max) {
     return min + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (max - min)));
 }
 
+
 void Jeu::boucleDeJeu() {
     RenderWindow window(VideoMode(WIDTH, HEIGHT), "Escape the Dungeon");
     resize(gameOverScreen, gameOverSprite, WIDTH, HEIGHT);
     gameOverSprite.setPosition(0, 0);
+
+    resize(winTexture, winSprite, WIDTH, HEIGHT);
+    winSprite.setPosition(0, 0);
+
+    resize(fondTexture, fondSprite, WIDTH, HEIGHT);
+    fondSprite.setPosition(0, 0);
+
+    resize(startScreenTexture, startScreenSprite, WIDTH, HEIGHT);
+    startScreenSprite.setPosition(0, 0);
+    Color couleurStart(241, 223, 247);
+    string textStart = "Appuyez sur une touche pour commencer";
+    makeText(start, font, textStart, 60, couleurStart, WIDTH / 2, 300);
+    FloatRect textBounds = start.getLocalBounds();
+    start.setOrigin(textBounds.width / 2, textBounds.height / 2);
+    start.setPosition(WIDTH / 2, 300);
+
+    Color couleurRectangle(230, 150, 80);
+    makeRectangle(timerRect, couleurRectangle, 5, 0, 125, 75);
+    
+    while (!startGame && window.isOpen()) {
+        Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == Event::Closed) {
+                window.close();
+            }
+            if (event.type == Event::KeyPressed) {
+                startGame = true; 
+            }
+        }
+        window.clear();
+        window.draw(startScreenSprite); 
+        window.draw(start);
+        window.display();
+    }
 
     //----------------------------------------------------ENNEMIS---------------------------------------
     Vector2f posEnemi1 = Vector2f(0,0);
@@ -79,16 +118,22 @@ void Jeu::boucleDeJeu() {
         posEnemi4.y += SIZEY;
     }
     makeEnemies(posEnemi4.x, posEnemi4.y, "patrol");
-    /*for (auto elem : enemies) {
-        cout << elem.getType(elem) << endl;
-    }*/
     //----------------------------------------------------/ENNEMIS---------------------------------------
-
 
     vector<unique_ptr<Interactable>> interactables;
     srand(static_cast<unsigned>(time(nullptr)));
-    interactables.push_back(make_unique<Potion>(Vector2f(randomFloat(0.f, WIDTH - SIZEX), randomFloat(0.f, HEIGHT - SIZEY))));
-    interactables.push_back(make_unique<Key>(Vector2f(randomFloat(0.f, WIDTH - SIZEX), randomFloat(0.f, HEIGHT - SIZEY))));
+    Vector2f posPotion = Vector2f(randomFloat(0.f, WIDTH * 3/4), randomFloat(0.f, HEIGHT * 3 / 4));
+    Vector2f posKey = Vector2f(randomFloat(0.f, WIDTH * 3 / 4), randomFloat(0.f, HEIGHT * 3 / 4));
+    while (map.isObstacle(posPotion.x, posPotion.y)) {
+        posPotion.x += SIZEX;
+        posPotion.y += SIZEY;
+    }
+    interactables.push_back(make_unique<Potion>(Vector2f(posPotion)));
+    while (map.isObstacle(posKey.x, posKey.y)) {
+        posKey.x += SIZEX;
+        posKey.y += SIZEY;
+    }
+    interactables.push_back(make_unique<Key>(Vector2f(posKey)));
 
     while (window.isOpen()) {
         Event event;
@@ -97,33 +142,64 @@ void Jeu::boucleDeJeu() {
             if (event.type == Event::Closed) {
                 window.close();
             }
+            if (map.isWin(player.getX(), player.getY() - 10) && player.keys > 0) {
+                win = true;
+            }
         }
         window.clear();
         window.setFramerateLimit(60);
+        window.draw(fondSprite);
         map.draw(window);
         for (int i = 0; i < enemies.size(); i++) {
-            if (!gameOver) { enemies[i].update(5.f); enemies[i].draw(window); }
-            //if (checkCollision(player.getX(), player.getY(), SIZEX, SIZEY, enemies[i].getX(), enemies[i].getY(), SIZEX, SIZEY)) {
-            //    gameOver = true;
-            //}
+            
+            float deltaTime = clock.restart().asSeconds();
+            if (!gameOver && !win) { enemies[i].update(deltaTime); enemies[i].draw(window); }
+            /*if (checkCollision(player.getX(), player.getY(), SIZEX, SIZEY, enemies[i].getX(), enemies[i].getY(), SIZEX, SIZEY)) {
+                gameOver = true;
+            }*/
         }
+        
+
+        if (timerInt == 60) { timerInt = 0; secondes++; }
+        if (secondes == 60) { secondes = 0; minutes++; }
+        string temps = to_string(minutes) + ":" + to_string(secondes);
+        makeText(timer, font, temps, 60, couleurStart, 20, 0);
 
         for (auto it = interactables.begin(); it != interactables.end();) {
             if (player.getBounds().intersects((*it)->getBounds())) {
                 (*it)->interact(player);
+                if (*it == interactables[1])
+                {
+                    player.collectKey();
+                }
                 it = interactables.erase(it);
             }
             else { ++it; }
         }
 
         if (gameOver) { window.draw(gameOverSprite); }
-        else { 
-            player.update(5.f); player.draw(window);
+        else if (!win) {
+            timerInt++;
+            window.draw(timerRect);
+            window.draw(timer);
+            float deltaTime2 = clock.restart().asSeconds();
+            player.update(deltaTime2); 
+            player.draw(window);
             for (const auto& interactable : interactables) {
                 interactable->draw(window);
             }
+        } 
+            
+        if (win) {
+            window.draw(winSprite);
+            timerRect.setPosition(WIDTH / 2 - timerRect.getSize().x / 2, 80);
+            window.draw(timerRect);
+            FloatRect textBounds2 = timer.getLocalBounds();
+            timer.setOrigin(textBounds2.width / 2, textBounds2.height / 2);
+            timer.setPosition(WIDTH / 2, 100);
+            window.draw(timer);
         }
-        
+
         window.display();
     }
 }

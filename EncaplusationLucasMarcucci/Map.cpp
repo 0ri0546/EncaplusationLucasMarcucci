@@ -17,7 +17,7 @@ void Map::loadFromFile(const string& filename) {
     wallTexture.loadFromFile("wall.png");
     doorTexture.loadFromFile("door.png");
     resize(wallTexture, wallSprite, SIZEX, SIZEY);
-    resize(doorTexture, doorSprite, SIZEX, SIZEY);
+    resize(doorTexture, doorSprite, SIZEX * 2, SIZEY);
 }
 
 void Map::draw(RenderWindow& window) {
@@ -39,16 +39,19 @@ bool Map::isObstacle(double x, double y) {
     int tileX = x / (double)SIZEX;
     int tileY = y / (double)SIZEY;
 
-    if (mapData[tileY][tileX] == '#') {;
+    if (mapData[tileY][tileX] == '#' || mapData[tileY][tileX] == 'D' || mapData[tileY][tileX] == 'd') {;
         return true;
     }
-    else if (mapData[tileY][tileX] == 'D') {
-        if (Keyboard::isKeyPressed(Keyboard::E)) {
-            if (true) { // si il a la clef
-                return false;
-            }
-        }
+    return false;
+}
+
+bool Map::isWin(double x, double y) {
+    int tileX = x / (double)SIZEX;
+    int tileY = y / (double)SIZEY;
+
+    if (mapData[tileY][tileX] == 'D' && Keyboard::isKeyPressed(Keyboard::E)) {
         return true;
+        cout << "test";
     }
     return false;
 }

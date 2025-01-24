@@ -3,11 +3,18 @@
 Player::Player(double x, double y, double spe) : x(x), y(y), spe(spe) {
 	if (!personnageTexture.loadFromFile("personnage.png")) {}
 	resize(personnageTexture, personnageSprite, SIZEX, SIZEY);
+
+	frameWidth = personnageTexture.getSize().x / totalFrames;
+	frameHeight = personnageTexture.getSize().y;
+
+	resize(personnageTexture, personnageSprite, SIZEX * 4, SIZEY);
+	personnageSprite.setTextureRect(IntRect(0, 0, frameWidth, frameHeight));
 	personnageSprite.setPosition(x, y);
 }
 
 void Player::update(float deltaTime) {
 	handleInput();
+	animate(0.016f);
 }
 
 void Player::draw(RenderWindow& window) {
@@ -25,6 +32,7 @@ void Player::handleInput() {
 	}
 	if (Keyboard::isKeyPressed(Keyboard::Up) && personnageSprite.getPosition().y > 0 && !map.isObstacle(personnageSprite.getPosition().x, personnageSprite.getPosition().y - spe)) { personnageSprite.move(0,-spe); }
 	if (Keyboard::isKeyPressed(Keyboard::Down) && personnageSprite.getPosition().y + SIZEY < HEIGHT && !map.isObstacle(personnageSprite.getPosition().x, personnageSprite.getPosition().y + spe + SIZEY)) { personnageSprite.move(0, spe); }
+	animate(0.016f);
 }
 
 void Player::increaseSpeed(float speed) {
@@ -42,3 +50,13 @@ const FloatRect Player::getBounds() {
 double Player::getX() { return personnageSprite.getPosition().x; }
 double Player::getY() { return personnageSprite.getPosition().y; }
 Vector2f Player::getPos() { return personnageSprite.getPosition(); }
+
+void Player::animate(float deltaTime) {
+	timeSinceLastFrame += deltaTime;
+
+	if (timeSinceLastFrame >= animationSpeed) {
+		currentFrame = (currentFrame + 1) % totalFrames;
+		personnageSprite.setTextureRect(IntRect(currentFrame * frameWidth, 0, frameWidth, frameHeight));
+		timeSinceLastFrame = 0;
+	}
+}
