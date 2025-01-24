@@ -24,4 +24,6 @@ Jour 5
 	-fix les collisions
 	-ajout du tp
 	-correction de bug
+	-ajout du timer 30s
+	-save l'image de fin (fonctionne pas mais le code semble correct)
 	
