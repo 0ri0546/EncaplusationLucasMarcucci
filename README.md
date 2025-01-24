@@ -1,9 +1,9 @@
-# Escape the Dungeon
+### Escape the Dungeon
 # Description du Projet
 Escape the Dungeon est un jeu d'aventure en 2D où le joueur incarne un personnage tentant de s'échapper d'un donjon. Le joueur doit éviter les ennemis, collecter des objets, résoudre des énigmes et atteindre la porte de sortie dans un temps imparti. Ce projet a été réalisé dans le cadre d'un exercice pédagogique pour apprendre les concepts avancés de la programmation orientée objet, la gestion graphique avec SFML, et les mécanismes de jeu.
 
 
-# Fonctionnalités
+# Fonctionnalités : 
 Personnage principal : contrôlé avec les touches directionnelles.
 
 # Ennemis polymorphiques :
