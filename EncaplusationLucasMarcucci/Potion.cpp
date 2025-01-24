@@ -7,7 +7,7 @@ Potion::Potion(const Vector2f& pos) : position(pos) {
 }
 
 void Potion::interact(Player& player) {
-    player.increaseSpeed(10.f);
+    player.increaseSpeed(6.f);
 }
 
 const void Potion::draw(RenderWindow& window) {

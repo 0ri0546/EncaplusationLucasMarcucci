@@ -12,3 +12,16 @@ Jour 2
 Jour 3
 	-objets (potion de vitesse et clef)
 	-textures des enemis, personnage, objets, map
+
+
+Jour 4 
+	-map via .txt
+	-collisions (début)
+	-animations des textures enemi, joueur
+	-condition de victoire (press E à coté de la porte avec la clef)
+
+Jour 5
+	-fix les collisions
+	-ajout du tp
+	-correction de bug
+	

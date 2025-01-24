@@ -5,8 +5,8 @@
 
 class Map {
 private:
-    Texture wallTexture, floorTexture, doorTexture;
-    Sprite wallSprite, floorSprite, doorSprite;
+    Texture wallTexture, floorTexture, doorTexture, tpTexture;
+    Sprite wallSprite, floorSprite, doorSprite, tpSprite;
 
 public:
     bool doorLocked = true;
@@ -16,6 +16,7 @@ public:
     bool isObstacle(double x, double y);
     void resize(Texture& texture, Sprite& sprite, float scaleX, float scaleY);
     bool isWin(double x, double y);
+    bool collisionTp(double x, double y);
 };
 
 #endif

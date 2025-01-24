@@ -18,6 +18,6 @@ using namespace sf;
 const static int WIDTH = 1920;
 const static int HEIGHT = 1080;
 
-const static int SIZEX = 50;
-const static int SIZEY = 50;
+const static int SIZEX = 40;
+const static int SIZEY = 40;
 #endif
