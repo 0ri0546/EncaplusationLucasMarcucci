@@ -12,11 +12,12 @@ public:
 	Clock clock;
 	Font font;
 	Cursor cursor;
+	Image image;
 	
 	Jeu(double x, double y, double speed);
 
-	Texture gameOverScreen, winTexture, fondTexture, startScreenTexture;
-	Sprite gameOverSprite, winSprite, fondSprite, startScreenSprite; 
+	Texture gameOverScreen, winTexture, fondTexture, startScreenTexture, cursorTexture, save, test;
+	Sprite gameOverSprite, winSprite, fondSprite, startScreenSprite, cursorSprite; 
 	Text start, timer;
 	RectangleShape timerRect, mort1;
 

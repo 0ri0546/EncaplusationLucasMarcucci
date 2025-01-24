@@ -6,7 +6,7 @@ Jeu::Jeu(double x, double y, double speed) : player(Player(x, y, speed)) {
     if (!fondTexture.loadFromFile("fond.jpg")) {}
     if (!startScreenTexture.loadFromFile("start.jpg")) {}
     if (!font.loadFromFile("font.ttf")) {}
-    if (cursor.loadFromSystem(sf::Cursor::Hand))
+    if (!cursorTexture.loadFromFile("cursor.png")) {}
     map.loadFromFile("map.txt");
     player.map = map;
 }
@@ -56,7 +56,8 @@ float Jeu::randomFloat(float min, float max) {
 
 void Jeu::boucleDeJeu() {
     RenderWindow window(VideoMode(WIDTH, HEIGHT), "Escape the Dungeon", Style::Fullscreen);
-    window.setMouseCursor(cursor);
+    window.setMouseCursorVisible(false);
+    View fixed = window.getView();
 
     resize(gameOverScreen, gameOverSprite, WIDTH, HEIGHT);
     gameOverSprite.setPosition(0, 0);
@@ -66,6 +67,7 @@ void Jeu::boucleDeJeu() {
 
     resize(fondTexture, fondSprite, WIDTH, HEIGHT);
     fondSprite.setPosition(0, 0);
+    resize(cursorTexture, cursorSprite, 20, 20);
 
     resize(startScreenTexture, startScreenSprite, WIDTH, HEIGHT);
     startScreenSprite.setPosition(0, 0);
@@ -97,7 +99,6 @@ void Jeu::boucleDeJeu() {
         window.draw(start);
         window.display();
     }
-
     //----------------------------------------------------ENNEMIS---------------------------------------
     Vector2f posEnemi1 = Vector2f(0,0);
     Vector2f posEnemi2 = Vector2f(50, 200);
@@ -169,6 +170,7 @@ void Jeu::boucleDeJeu() {
                 win = true;
             }
         }
+        cursorSprite.setPosition(static_cast<Vector2f>(Mouse::getPosition(window)));
         window.clear();
         window.setFramerateLimit(60);
         window.draw(fondSprite);
@@ -186,7 +188,6 @@ void Jeu::boucleDeJeu() {
         if (timerInt >= 60) { timerInt = 0; secondes--; }
         string temps = "0:" + to_string(secondes);
         makeText(timer, font, temps, 60, couleurStart, 20, 0);
-
         if (secondes < 0) { gameOver = true; }
 
         for (auto it = interactables.begin(); it != interactables.end();) {
@@ -215,6 +216,8 @@ void Jeu::boucleDeJeu() {
                     window.close();
                 }
             }
+            window.setView(fixed);
+            window.draw(cursorSprite);
         }
 
         else if (!win) {
@@ -236,8 +239,14 @@ void Jeu::boucleDeJeu() {
             timer.setOrigin(textBounds2.width / 2, textBounds2.height / 2);
             timer.setPosition(WIDTH / 2, 100);
             window.draw(timer);
-        }
 
+            save.update(window);
+            image = save.copyToImage();
+
+            image.saveToFile("victoires/imageDeLaVictoire.png");
+            
+        }
+        
         window.display();
     }
 }

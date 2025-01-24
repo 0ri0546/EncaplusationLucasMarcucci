@@ -55,8 +55,8 @@ bool Map::isWin(double x, double y) {
     int tileX = x / (double)SIZEX;
     int tileY = y / (double)SIZEY;
 
-    if (mapData[tileY][tileX] == 'D' || mapData[tileY][tileX] == 'd' && Keyboard::isKeyPressed(Keyboard::E)) {
-        return true;
+    if (mapData[tileY][tileX] == 'D' || mapData[tileY][tileX] == 'd' ) {
+        if (Keyboard::isKeyPressed(Keyboard::E)) { return true; }
     }
     return false;
 }
